@@ -5276,6 +5276,7 @@ static void HandleEndTurn_FinishBattle(void)
 
 static void FreeResetData_ReturnToOvOrDoEvolutions(void)
 {
+    setDeadFlagOnFeintedMons();
     if (!gPaletteFade.active)
     {
         gIsFishingEncounter = FALSE;

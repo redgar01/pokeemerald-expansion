@@ -4102,6 +4102,7 @@ void CalculateMonStats(struct Pokemon *mon)
     u16 species = GetMonData(mon, MON_DATA_SPECIES, NULL);
     s32 level = GetLevelFromMonExp(mon);
     s32 newMaxHP;
+    u8 dead = GetMonData(mon, MON_DATA_DEAD, NULL);
 
     SetMonData(mon, MON_DATA_LEVEL, &level);
 
@@ -4136,7 +4137,7 @@ void CalculateMonStats(struct Pokemon *mon)
     }
     else
     {
-        if (currentHP == 0 && oldMaxHP == 0)
+        if (currentHP == 0 && oldMaxHP == 0 && !dead)
             currentHP = newMaxHP;
         else if (currentHP != 0) {
             // BUG: currentHP is unintentionally able to become <= 0 after the instruction below. This causes the pomeg berry glitch.
@@ -5019,6 +5020,9 @@ u32 GetBoxMonData(struct BoxPokemon *boxMon, s32 field, u8 *data)
                 | (substruct3->worldRibbon << 26);
         }
         break;
+    case MON_DATA_DEAD:
+        retVal =  boxMon->dead;
+        break;
     default:
         break;
     }
@@ -5336,6 +5340,13 @@ void SetBoxMonData(struct BoxPokemon *boxMon, s32 field, const void *dataArg)
         substruct3->spAttackIV = (ivs >> 20) & MAX_IV_MASK;
         substruct3->spDefenseIV = (ivs >> 25) & MAX_IV_MASK;
         break;
+    }
+    case MON_DATA_DEAD:
+    {
+        if (*data)
+            boxMon->dead = TRUE;
+        else
+            boxMon->dead = FALSE;
     }
     default:
         break;

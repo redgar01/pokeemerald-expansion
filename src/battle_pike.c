@@ -1288,7 +1288,7 @@ static void TryHealMons(u8 healCount)
         struct Pokemon *mon = &gPlayerParty[indices[i]];
         u16 curr = GetMonData(mon, MON_DATA_HP);
         u16 max = GetMonData(mon, MON_DATA_MAX_HP);
-        if (curr < max)
+        if (curr < max && !GetMonData(&gPlayerParty[indices[i]], MON_DATA_DEAD))
         {
             canBeHealed = TRUE;
         }
